@@ -16,29 +16,36 @@ export const Shop = () => {
   const [dishes, setDishes] = useState(
     () => JSON.parse(localStorage.getItem("dishes")) ?? []
   );
-  console.log("dishes", dishes);
-  const [totalDishes, setTotalDishes] = useState(0);
+
+  const [totalDishes, setTotalDishes] = useState(
+    () => JSON.parse(localStorage.getItem("totalDishes")) ?? 0
+  );
   const [page, setPage] = useState(
     () => JSON.parse(localStorage.getItem("page")) ?? 1
   );
   const [loading, setLoading] = useState(false);
-
+  console.log("dishes.length", dishes.length);
+  console.log("totalDishes", totalDishes);
   useEffect(() => {
-    setLoading(true);
-    fetchDishes(page, shop).then((data) => {
-      setDishes((prevDishes) => [...prevDishes, ...data.dishList]);
-      setTotalDishes(data.total);
-    });
-    setLoading(false);
+    const localPage = JSON.parse(localStorage.getItem("page"));
+    if (localPage !== page) {
+      setLoading(true);
+
+      fetchDishes(page, shop).then((data) => {
+        setDishes((prevDishes) => [...prevDishes, ...data.dishList]);
+        setTotalDishes(data.total);
+      });
+      setLoading(false);
+    }
   }, [page, shop]);
 
-  // doesn't work when refresh page
   useEffect(() => {
     console.log("useEffect local");
     localStorage.setItem("shop", JSON.stringify(shop));
     localStorage.setItem("page", JSON.stringify(page));
-    // localStorage.setItem("dishes", JSON.stringify(dishes));
-  }, [shop, dishes, page]);
+    localStorage.setItem("dishes", JSON.stringify(dishes));
+    localStorage.setItem("totalDishes", JSON.stringify(totalDishes));
+  }, [shop, dishes, page, totalDishes]);
 
   const handleNavClick = (shop) => {
     setDishes([]);
