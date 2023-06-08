@@ -31,7 +31,7 @@ const ShoppingCart = () => {
               </List>
             </>
           ) : (
-            <p>You don't have any order dishes</p>
+            <p>You do not have any gitorder dishes</p>
           )}
         </Wrap>
       </Container>
