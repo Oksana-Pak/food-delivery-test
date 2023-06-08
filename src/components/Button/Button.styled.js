@@ -7,7 +7,7 @@ export const ButtonStyled = styled.button`
   margin: 0 auto;
   padding: 5px 10px;
 
-  background: ${(p) => (p.following ? "#5CD3A8" : "#ebd8ff")};
+  background: ${(p) => (p.ordered ? "#5CD3A8" : "#ebd8ff")};
   box-shadow: 0px 3.43693px 3.43693px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   border: none;
@@ -15,8 +15,6 @@ export const ButtonStyled = styled.button`
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
-
-  /* text-transform: uppercase; */
 
   color: #373737;
   ${(p) =>
@@ -26,7 +24,7 @@ export const ButtonStyled = styled.button`
   }`
       : null}
   ${(p) =>
-    p.hover && !p.following
+    p.hover && !p.ordered
       ? `&:hover {
     background: #5cd3a8;
   }`

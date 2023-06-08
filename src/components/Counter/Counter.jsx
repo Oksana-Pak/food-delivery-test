@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "./Counter.styled";
-// import { AiFillCaretUp, AiFillCaretDown } from "react-icons/ai";
+import { AiFillCaretUp, AiFillCaretDown } from "react-icons/ai";
 
 export const Counter = () => {
   const [count, setCount] = useState(0);
@@ -19,18 +19,18 @@ export const Counter = () => {
   return (
     <div>
       <p>{count}</p>
-      <Button type="button" onClick={increment}>
+      {/* <Button type="button" onClick={increment}>
         +
       </Button>
       <Button type="button" onClick={decrement}>
         -
-      </Button>
-      {/* <button type="button" onClick={increment}>
+      </Button> */}
+      <button type="button" onClick={increment}>
         <AiFillCaretUp />
       </button>
       <button type="button" onClick={decrement}>
         <AiFillCaretDown />
-      </button> */}
+      </button>
     </div>
   );
 };

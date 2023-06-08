@@ -3,9 +3,9 @@ import { Route, Routes, Navigate } from "react-router-dom";
 
 import { Layout } from "./components/Layout/Layout";
 import { Shop } from "./pages/Shop/Shop";
-import { ShoppingCart } from "./pages/ShoppingCart/ShoppingCart";
+// import { ShoppingCart } from "./pages/ShoppingCart/ShoppingCart";
 
-// const ShoppingCart = lazy(() => import("./pages/ShoppingCart/ShoppingCart"));
+const ShoppingCart = lazy(() => import("./pages/ShoppingCart/ShoppingCart"));
 
 export const App = () => {
   return (

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { DishItem } from "../DishItem/DishItem";
 import { DishListStyled } from "./DishList.styled";
 
-export const DishList = ({ dishes }) => {
+export const DishList = ({ onChangeLocalStatus, dishes }) => {
   const [dishesCart, setDishesCart] = useState(
     () => JSON.parse(localStorage.getItem("dishesCart")) ?? []
   );
@@ -12,25 +12,24 @@ export const DishList = ({ dishes }) => {
     localStorage.setItem("dishesCart", JSON.stringify(dishesCart));
   }, [dishesCart]);
 
-  const addDishToCart = (dish) =>
-    setDishesCart((prevDishes) => {
-      return [...prevDishes, dish];
-    });
+  const addDishToCart = (dish) => {
+    setDishesCart((prevDishes) => [...prevDishes, dish]);
+    onChangeLocalStatus(dish);
+  };
 
   const removeDishFromCart = (dish) => {
     setDishesCart((prevDishes) => {
-      const index = prevDishes.findIndex((prevDish) => prevDish.id === dish.id);
-      if (index > -1) {
-        prevDishes.splice(index, 1);
-      }
-      console.log("prev", prevDishes);
-      return [...prevDishes];
+      const updatedDishes = prevDishes.filter(
+        (prevDish) => prevDish._id !== dish._id
+      );
+      return updatedDishes;
     });
+    onChangeLocalStatus(dish);
   };
 
   return (
     <DishListStyled>
-      {dishes.map((dish) => (
+      {dishes?.map((dish) => (
         <DishItem
           key={dish._id}
           {...dish}
@@ -43,5 +42,6 @@ export const DishList = ({ dishes }) => {
 };
 
 DishList.propTypes = {
+  onChangeLocalStatus: PropTypes.func.isRequired,
   dishes: PropTypes.array.isRequired,
 };

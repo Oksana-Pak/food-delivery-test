@@ -8,56 +8,42 @@ import {
 } from "./DishItem.styled";
 
 export const DishItem = ({ addDish, removeDish, ...dish }) => {
-  const { preview, title, _id: id } = dish;
-  const [isDishInCart, setIsDishInCart] = useState(false);
-  // const [dishInCart, setDishInCart] = useState(null);
+  const { preview, title, _id } = dish;
+
+  const [isDishInCart, setIsDishInCart] = useState(
+    () =>
+      JSON.parse(localStorage.getItem("dishes"))?.find(
+        (dishCart) => dishCart._id === _id
+      )?.isDishInCart ?? false
+  );
+
+  const newDish = { ...dish };
+
+  const handleChangeStatus = () => {
+    newDish.isDishInCart = !isDishInCart;
+  };
 
   const handleClickButton = () => {
     if (isDishInCart) {
       setIsDishInCart(false);
-      removeDish(dish);
+      handleChangeStatus();
+      removeDish(newDish);
     } else {
       setIsDishInCart(true);
-      addDish(dish);
+      handleChangeStatus();
+      addDish(newDish);
     }
   };
-
-  // const handleClickAdd = () => {
-  //   setIsDishInCart(true);
-  //   console.log(isDishInCart);
-  //   addDish(dish);
-  // };
-
-  // const handleClickRemove = () => {
-  //   setIsDishInCart(false);
-  //   removeDish(dish);
-  // };
 
   return (
     <DishItemStyled>
       <PreviewImg src={preview} alt={title} />
       <ImgTitle>{title}</ImgTitle>
-      {/* {isDishInCart ? (
-        <ButtonAdd
-          type="button"
-          title={"Remove from Cart"}
-          onClick={handleClickRemove}
-          width="120px"
-          hover
-        />
-      ) : (
-        <ButtonAdd
-          type="button"
-          title={"Add to Cart"}
-          onClick={handleClickAdd}
-          width="120px"
-          hover
-        />
-      )} */}
       <ButtonAdd
         type="button"
         title={isDishInCart ? "Remove from Cart" : "Add to Cart"}
         onClick={handleClickButton}
+        ordered={isDishInCart}
         width="120px"
         hover
       />

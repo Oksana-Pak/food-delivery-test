@@ -24,8 +24,7 @@ export const Shop = () => {
     () => JSON.parse(localStorage.getItem("page")) ?? 1
   );
   const [loading, setLoading] = useState(false);
-  console.log("dishes.length", dishes.length);
-  console.log("totalDishes", totalDishes);
+
   useEffect(() => {
     const localPage = JSON.parse(localStorage.getItem("page"));
     if (localPage !== page) {
@@ -40,7 +39,6 @@ export const Shop = () => {
   }, [page, shop]);
 
   useEffect(() => {
-    console.log("useEffect local");
     localStorage.setItem("shop", JSON.stringify(shop));
     localStorage.setItem("page", JSON.stringify(page));
     localStorage.setItem("dishes", JSON.stringify(dishes));
@@ -59,13 +57,23 @@ export const Shop = () => {
     scroll.scrollMore(500, { duration: 1000 });
   };
 
+  const changeStatusLocalDish = (newDish) => {
+    const updatedDish = dishes.map((dish) =>
+      newDish._id === dish._id ? newDish : dish
+    );
+    setDishes(updatedDish);
+  };
+
   return (
     <Section>
       <Container>
         <ShopWrap>
           <ShopNav onClick={handleNavClick} />
           <ShopListWrap>
-            <DishList dishes={dishes} />
+            <DishList
+              dishes={dishes}
+              onChangeLocalStatus={changeStatusLocalDish}
+            />
             {dishes.length < totalDishes && !loading && (
               <Button
                 title="Load More"
