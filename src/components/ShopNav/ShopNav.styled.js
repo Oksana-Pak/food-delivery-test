@@ -22,10 +22,17 @@ export const NavItem = styled(NavLink)`
   &.active {
     color: #471ca9;
     background: #ebd8ff;
+    /* background: red; */
   }
+
   :hover:not(.active),
   :focus-visible:not(.active) {
     color: #471ca9;
     background: #5cd3a8;
+  }
+
+  &.disabled-link {
+    color: #999; //Змінюємо колір тексту на сірий
+    background: transparent;
   }
 `;

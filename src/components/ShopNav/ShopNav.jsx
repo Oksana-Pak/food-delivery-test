@@ -24,16 +24,26 @@ const links = [
   },
 ];
 
-export const ShopNav = ({ onClick }) => {
-  const handleClick = (category) => {
-    onClick(category);
+export const ShopNav = ({ onClick, isDisabled, shop }) => {
+  const handleClick = (e, category) => {
+    if (isDisabled) {
+      e.preventDefault(); // Забороняємо перехід на посиланнях
+    } else {
+      onClick(category);
+    }
   };
+
   return (
     <ShopWrapper>
       <p>Shops:</p>
       <Nav>
         {links.map(({ to, title }) => (
-          <NavItem key={title} to={to} onClick={() => handleClick(title)}>
+          <NavItem
+            key={title}
+            to={isDisabled ? null : to}
+            onClick={(e) => handleClick(e, title)}
+            className={shop === title ? "" : isDisabled ? "disabled-link" : ""}
+          >
             {title}
           </NavItem>
         ))}
@@ -44,4 +54,6 @@ export const ShopNav = ({ onClick }) => {
 
 ShopNav.propTypes = {
   onClick: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
+  shop: PropTypes.string.isRequired,
 };

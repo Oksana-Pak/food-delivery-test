@@ -1,14 +1,34 @@
+import { useState } from "react";
 import { Form } from "../../components/Form/Form";
 import { Section, Wrap, List, Item } from "./ShoppingCart.styled";
 import { Container } from "../../components/Layout/Layout.styled";
 import { Counter } from "../../components/Counter/Counter";
+import {
+  getDataFromLocalStorage,
+  saveDataToLocalStorage,
+} from "../../services/localStorage";
 
 const ShoppingCart = () => {
-  const dishesCart = JSON.parse(localStorage.getItem("dishesCart"));
+  const [dishesCart, setDishesCart] = useState(
+    () => getDataFromLocalStorage("dishesCart") ?? []
+  );
 
-  if (!dishesCart) {
-    return null;
-  }
+  const calculateTotal = () => {
+    return dishesCart.reduce(
+      (total, dish) => total + dish.price * dish.quantity,
+      0
+    );
+  };
+
+  const handleCounterChange = (dishId, newQuantity) => {
+    // Оновлення кількості товару в кошику
+    const updatedDishesCart = dishesCart.map((dish) =>
+      dish._id === dishId ? { ...dish, quantity: newQuantity } : dish
+    );
+
+    setDishesCart(updatedDishesCart);
+    saveDataToLocalStorage("dishesCart", updatedDishesCart);
+  };
 
   return (
     <Section>
@@ -23,15 +43,21 @@ const ShoppingCart = () => {
                     <img src={dish.preview} />
                     <div>
                       <p>{dish.title}</p>
-                      <p>Price</p>
-                      <Counter />
+                      <p>Price: {dish.price}</p>
+                      <Counter
+                        onChange={(newQuantity) => {
+                          handleCounterChange(dish._id, newQuantity);
+                        }}
+                        dishId={dish._id}
+                      />
                     </div>
                   </Item>
                 ))}
               </List>
+              <p>Total price: ${calculateTotal()}</p>
             </>
           ) : (
-            <p>You do not have any gitorder dishes</p>
+            <p>You do not have any dishes ordered</p>
           )}
         </Wrap>
       </Container>

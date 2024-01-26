@@ -1,30 +1,32 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
-import { Button } from "./Counter.styled";
 import { AiFillCaretUp, AiFillCaretDown } from "react-icons/ai";
+import { getDataFromLocalStorage } from "../../services/localStorage";
 
-export const Counter = () => {
-  const [count, setCount] = useState(0);
+export const Counter = ({ onChange, dishId }) => {
+  const [count, setCount] = useState(
+    () =>
+      getDataFromLocalStorage("dishesCart")?.find(
+        (dishCart) => dishCart._id === dishId
+      )?.quantity ?? 1
+  );
 
   const increment = () => {
-    setCount(count + 1);
+    setCount((prevState) => prevState + 1);
+    onChange(count + 1);
   };
 
   const decrement = () => {
-    if (count === 0) {
+    if (count === 1) {
       return null;
     }
-    setCount(count - 1);
+    setCount((prevState) => prevState - 1);
+    onChange(count - 1);
   };
 
   return (
     <div>
       <p>{count}</p>
-      {/* <Button type="button" onClick={increment}>
-        +
-      </Button>
-      <Button type="button" onClick={decrement}>
-        -
-      </Button> */}
       <button type="button" onClick={increment}>
         <AiFillCaretUp />
       </button>
@@ -33,4 +35,8 @@ export const Counter = () => {
       </button>
     </div>
   );
+};
+Counter.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  dishId: PropTypes.string.isRequired,
 };

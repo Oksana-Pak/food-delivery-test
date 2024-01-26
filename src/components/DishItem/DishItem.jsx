@@ -6,18 +6,19 @@ import {
   ImgTitle,
   ButtonAdd,
 } from "./DishItem.styled";
+import { getDataFromLocalStorage } from "../../services/localStorage";
 
 export const DishItem = ({ addDish, removeDish, ...dish }) => {
   const { preview, title, _id } = dish;
 
   const [isDishInCart, setIsDishInCart] = useState(
     () =>
-      JSON.parse(localStorage.getItem("dishes"))?.find(
+      getDataFromLocalStorage("dishes")?.find(
         (dishCart) => dishCart._id === _id
       )?.isDishInCart ?? false
   );
 
-  const newDish = { ...dish };
+  const newDish = { ...dish, quantity: 1 };
 
   const handleChangeStatus = () => {
     newDish.isDishInCart = !isDishInCart;
